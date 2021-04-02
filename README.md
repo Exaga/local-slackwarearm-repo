@@ -1,6 +1,6 @@
 # local-slackwarearm-repo README
 
- local-slackwarearm-repo is also available on SlackDocs Project: \
+ local-slackwarearm-repo is also available on SlackDocs Project: <br />
  https://docs.slackware.com/howtos:hardware:arm:slackwarearm_local-mirror-repository
 
  Create Slackware ARM local mirror repository utility script.
@@ -8,11 +8,11 @@
  local-slackwarearm-repo.sh - SAREPO [v2.0.3] -  13 Mar 2021
 
  Copyright (c) 2021 Exaga - SARPi Project - https://sarpi.penthux.net
-
- Version - 08 Mar 2021 [v0.1a] - progenitor \
-         - 10 Mar 2021 [v1]    - associative array mechanics \ 
-         - 12 Mar 2021 [v2]    - indexed array mechanics \
-
+```
+ Versions - 08 Mar 2021 [v0.1a] - progenitor 
+          - 10 Mar 2021 [v1]    - associative array mechanics  
+          - 12 Mar 2021 [v2]    - indexed array mechanics 
+```
 ######
 
  This script creates a local Slackware ARM mirror repository of any  
