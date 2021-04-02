@@ -1,6 +1,6 @@
 # local-slackwarearm-repo README
 
- local-slackwarearm-repo is also available on SlackDocs Project: <br />
+ local-slackwarearm-repo is also available on SlackDocs Project: \
  https://docs.slackware.com/howtos:hardware:arm:slackwarearm_local-mirror-repository
 
  Create Slackware ARM local mirror repository utility script.
@@ -100,6 +100,6 @@ BANDWIDTH_LIMIT="0"
 ######################################################################
 ```
 
-Then RUN the script and/or put it in a crontab...
+Then RUN the script periodically and/or put it in a crontab...
 
 #EOF<*>
