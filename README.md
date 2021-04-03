@@ -25,8 +25,13 @@
  /home/$(whoami)/bin directory to store a database and logfile which 
  contains a list of all the local repository files and used to verify 
  (diff) with a remote repository to check if there's any updates. This 
- script can also be added to crontab to run periodically.
-
+ script can also be added to crontab to run periodically. For example, 
+ to run this script automatically every day at 9:30pm do this:
+ ```
+ ~$ crontab -e
+  # enter the following line into crontab - then save and exit
+  30 21 * * * /home/<-username->/bin/local-slackwarearm-repo.sh > /dev/null 2>&1
+```
  Put this script anywhere you choose and run like this:
 ```
  ~$ chmod +x local-slackwarearm-repo.sh 
