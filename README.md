@@ -22,7 +22,7 @@
 
  This script will create a /home/$(whoami)/slackwarearm directory, by 
  default, which to store any repository data. It will also create a 
- /home/<-username->/bin directory to store a database and logfile which 
+ /home/$(whoami)/bin directory to store a database and logfile which 
  contains a list of all the local repository files and used to verify 
  (diff) with a remote repository to check if there's any updates. This 
  script can also be added to crontab to run periodically.
