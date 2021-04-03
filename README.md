@@ -38,7 +38,7 @@
  use you may find for it. After setting up and starting the httpd daemon 
  just create a symlink to the repository directory. For example: 
 ```
- ~# ln -sf /home/$(whoami)/slackwarearm /var/www/htdocs/slackwarearm
+ ~# ln -sf /home/<-username->/slackwarearm /var/www/htdocs/slackwarearm
 ```
  Then it should be accessible in your browser and can be used as a URL 
  during Slackware ARM 'setup' when selecting source media. 
