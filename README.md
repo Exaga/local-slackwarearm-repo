@@ -67,7 +67,7 @@ PETNAM="SAREPO"
 
 # User directory vars
 USERDIR="/home/$(whoami)"
-SOURCEDIR="${USERDIR}/slackwarearm"
+SOURCEDIR="${USERDIR}/public_html/slackwarearm"
 USERBINDIR="${USERDIR}/bin"
 LOG_FILE="${USERBINDIR}/${PRGNAM}.log"
 
@@ -77,7 +77,7 @@ LOG_FILE="${USERBINDIR}/${PRGNAM}.log"
 # on the remote server before you can download it. Obviously! 
 #
 # Slackware ARMVERS elements [ 14.2 | 15.0 | current | devtools ]
-ARMVERS=(14.2 current devtools)
+ARMVERS=(14.2 15.0 devtools)
 
 # Same as the above but this is for Slackware AARCH64 versions when 
 # it is released.
