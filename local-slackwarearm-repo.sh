@@ -2,9 +2,9 @@
 
 # Create Slackware ARM local repository mirror utility script.
 #
-# local-slackwarearm-repo.sh - SAREPO [v2.0.3] -  13 Mar 2021
+# local-slackwarearm-repo.sh - SAREPO [v2.0.3] - 13 Mar 2021
 #
-# Copyright (c) 2021 Exaga - SARPi Project - sarpi.penthux.net
+# Coyright (c) 2021 Exaga - SARPi Project - sarpi.penthux.net
 #
 # Version - 08 Mar 2021 [v0.1a] - progenitor
 #         - 10 Mar 2021 [v1]    - associative array mechanics 
@@ -64,7 +64,7 @@ PETNAM="SAREPO"
 
 # User directory vars
 USERDIR="/home/$(whoami)"
-SOURCEDIR="${USERDIR}/slackwarearm"
+SOURCEDIR="${USERDIR}/public_html/slackwarearm"
 USERBINDIR="${USERDIR}/bin"
 LOG_FILE="${USERBINDIR}/${PRGNAM}.log"
 
@@ -74,7 +74,7 @@ LOG_FILE="${USERBINDIR}/${PRGNAM}.log"
 # on the remote server before you can download it. Obviously! 
 #
 # Slackware ARMVERS elements [ 14.2 | 15.0 | current | devtools ]
-ARMVERS=(14.2 current devtools)
+ARMVERS=(14.2 15.0 devtools)
 
 # Same as the above but this is for Slackware AARCH64 versions when 
 # it is released.
@@ -100,12 +100,13 @@ BANDWIDTH_LIMIT="0"
 ######################################################################
 ##            END OF local-slackwarearm-repo.sh SETTINGS            ##
 ######################################################################
+
 # Halt build process on error
-#set -ue
+set -ue
 IFS="$(printf '\n\t')"
 
 # Local .database and .lock files
-LOCAL_SAREPO_DB="${USERBINDIR}/${PRGNAM}.database"
+LOCAL_SAREPO_DB="${USERBINDIR}/.${PRGNAM}.database"
 TMP_DATA_DB="${USERBINDIR}/.${PRGNAM}.TMP"
 LOCK_FILE="${TMP_DATA_DB}.lock"
 
@@ -126,17 +127,19 @@ mkdir -p "${SOURCEDIR}" "${USERBINDIR}"
 rm -f "${TMP_DATA_DB}"
 touch "${LOCAL_SAREPO_DB}"
 
-# Create LOCKFILE - exit if it already exists
+# Create LOCK_FILE - exit if PRGNAM is already running
 if [ -f "${LOCK_FILE}" ]; then
   for PID in $(pidof -x "${PRGNAM}.sh"); do
     if [ "${PID}" != "$$" ]; then
-        echo "[!] ERROR : ${PRGNAM} : Process is already running with PID ${PID} ..."
-        log "[!] ERROR : ${PRGNAM} : Process is already running with PID ${PID} ..."
-        exit 1
+      echo "[!] ERROR : ${PRGNAM} : Process is already running with PID ${PID} ..."
+      log "[!] ERROR : ${PRGNAM} : Process is already running with PID ${PID} ..."
+      exit 1
+	else
+	  rm -f "${LOCK_FILE}"
+      touch "${LOCK_FILE}"
     fi
   done
 else
-  rm -f "${LOCK_FILE}"
   touch "${LOCK_FILE}"
 fi
 
@@ -148,10 +151,10 @@ array_element_mechanics () {
     REMOTE_SAREPO_ARM_PATH="${SAREPO_URL}${REMOTE_SAREPO_DIR}"/"${SLACKNAM[0]}${ARMPROJECT[0]}"
 	for elementarm in "${!ARMVERS[@]}"; do
       log "> [${SAREPO_URL}] ${SLACKNAM[0]}${ARMPROJECT[0]}-${ARMVERS[$elementarm]}"
-      rsync -av --no-motd --contimeout=30 --timeout=60 --delete --itemize-changes --human-readable \
-        --log-file="${LOG_FILE}" --log-file-format="%o %n %'''b" --bwlimit="${BANDWIDTH_LIMIT}" \
-	"${REMOTE_SAREPO_ARM_PATH}-${ARMVERS[$elementarm]}" "${SOURCEDIR}" || \
-        exit "${PIPESTATUS[@]}"
+      rsync -avq --no-motd --contimeout=30 --timeout=60 --delete --itemize-changes --human-readable \
+      --log-file="${LOG_FILE}" --log-file-format="%o %n %'''b" --bwlimit="${BANDWIDTH_LIMIT}" \
+	  "${REMOTE_SAREPO_ARM_PATH}-${ARMVERS[$elementarm]}" "${SOURCEDIR}" || \
+      exit "${PIPESTATUS[@]}"
     done
   fi
   # Slackware AARCH64 elements
@@ -159,10 +162,10 @@ array_element_mechanics () {
     REMOTE_SAREPO_A64_PATH="${SAREPO_URL}${REMOTE_SAREPO_DIR}"/"${SLACKNAM[0]}${ARMPROJECT[0]+aarch64}"
     for elementa64 in "${!A64VERS[@]}"; do
       log "> [${SAREPO_URL}] ${SLACKNAM[0]}${ARMPROJECT[0]+aarch64}-${A64VERS[$elementa64]}"
-      rsync -av --no-motd --contimeout=30 --timeout=60 --delete --itemize-changes --human-readable \
-        --log-file="${LOG_FILE}" --log-file-format="%o %n %'''b" --bwlimit="${BANDWIDTH_LIMIT}" \
-	"${REMOTE_SAREPO_A64_PATH}-${A64VERS[$elementa64]}" "${SOURCEDIR}" || \
-        exit "${PIPESTATUS[@]}"
+      rsync -avq --no-motd --contimeout=30 --timeout=60 --delete --itemize-changes --human-readable \
+      --log-file="${LOG_FILE}" --log-file-format="%o %n %'''b" --bwlimit="${BANDWIDTH_LIMIT}" \
+	  "${REMOTE_SAREPO_A64_PATH}-${A64VERS[$elementa64]}" "${SOURCEDIR}" || \
+      exit "${PIPESTATUS[@]}"
     done
   fi
   # Process database file
@@ -174,7 +177,8 @@ array_element_mechanics () {
 build_database() {
   cd "${SOURCEDIR}"
   echo "${PETNAM} : verifying ${PRGNAM}.database ..."
-  find . -type f ! -name "index.html" -print0 | xargs -0 ls -la --time-style=full >> "${TMP_DATA_DB}" 
+  find . -type f ! -name "index.html" -exec ls -la --time-style=full "{}" \+ >> "${TMP_DATA_DB}" 
+  #find . -type f ! -name "index.html" -print0 | xargs -0 ls -la --time-style=full >> "${TMP_DATA_DB}" 
   cmp -s "${TMP_DATA_DB}" "${LOCAL_SAREPO_DB}" && CMPSTATUS=0 || CMPSTATUS=1
   if [[ $CMPSTATUS -eq 0 ]]; then 
     log "${PETNAM} : Local repository database is up-to-date ..."
@@ -193,3 +197,4 @@ build_database() {
 array_element_mechanics
 
 #EOF<*>
+
