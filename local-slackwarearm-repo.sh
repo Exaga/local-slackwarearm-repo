@@ -177,7 +177,7 @@ array_element_mechanics () {
 build_database() {
   cd "${SOURCEDIR}"
   echo "${PETNAM} : verifying ${PRGNAM}.database ..."
-  find . -type f ! -name "index.html" -exec ls -la --time-style=full "{}" \+ >> "${TMP_DATA_DB}" 
+  find . -type f ! -name ".*" ! -name "index.html" ! -path "./.sarepo/*" -exec ls -la --time-style=full "{}" \+ >> "${TEMP_DB_FILE}" 
   #find . -type f ! -name "index.html" -print0 | xargs -0 ls -la --time-style=full >> "${TMP_DATA_DB}" 
   cmp -s "${TMP_DATA_DB}" "${LOCAL_SAREPO_DB}" && CMPSTATUS=0 || CMPSTATUS=1
   if [[ $CMPSTATUS -eq 0 ]]; then 
