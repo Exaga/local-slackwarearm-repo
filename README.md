@@ -47,6 +47,9 @@
 ```
  Then it should be accessible in your browser and can be used as a URL 
  during Slackware ARM 'setup' when selecting source media. 
+ 
+ A fancyindexing front-end for viewing the local Slackware ARM repository  
+ in a browser is available: https://github.com/Exaga/SAREPO_theme  
 
  ######
 
